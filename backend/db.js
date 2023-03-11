@@ -19,7 +19,8 @@ export default class DB {
     }
 
     queryById(id) {
-        return collection.findOne({ _id: id });
+        let f ={_id:newObjectId(id)};
+        return collection.findOne(f);
     }    
 
     update(id, order) {
