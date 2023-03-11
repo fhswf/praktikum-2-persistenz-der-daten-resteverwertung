@@ -25,15 +25,40 @@ app.get('/todos', async (req, res) => {
     res.send(todos);
 });
 
+
 //
 // YOUR CODE HERE
 //
 // Implement the following routes:
 // GET /todos/:id
-// POST /todos
-// PUT /todos/:id
-// DELETE /todos/:id
 
+app.get('/todos/:id', async (req, res) => {
+    const { id } = req.params;
+    const todo = await db.queryById(id);
+    res.send(todo);
+});
+
+// POST /todos
+app.post('/todos', async (req, res) => {
+    const { title, due, status } = req.body;
+    const newTodo = await db.create({ title, due, status });
+    res.send(newTodo);
+});
+
+// PUT /todos/:id
+app.put('/todos/:id', async (req, res) => {
+    const { id } = req.params;
+    const { title, due, status } = req.body;
+    const updatedTodo = await db.update(id, { title, due, status });
+    res.send(updatedTodo);
+});
+
+// DELETE /todos/:id
+app.delete('/todos/:id', async (req, res) => {
+    const { id } = req.params;
+    await db.delete(id);
+    res.send({ message: `Todo with id ${id} has been deleted.` });
+});
 
 initDB()
     .then(() => {
